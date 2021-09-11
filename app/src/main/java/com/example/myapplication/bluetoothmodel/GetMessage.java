@@ -19,8 +19,10 @@ import java.nio.charset.StandardCharsets;
 import static com.example.myapplication.MainActivity.socket;
 
 public class GetMessage extends Thread {
-    private InputStream inputStream;
-    private OutputStream outputStream;
+    //单片机->手机
+    private static InputStream inputStream = null;
+    //手机->单片机
+    private static OutputStream outputStream = null;
     private Activity activity;
     private Context context;
 
@@ -40,19 +42,13 @@ public class GetMessage extends Thread {
     public GetMessage(Activity activity, Context context) {
         this.activity = activity;
         this.context = context;
-        //单片机->手机
-        InputStream input = null;
-        //手机->单片机
-        OutputStream output = null;
 
         try {
-            input = socket.getInputStream();
-            output = socket.getOutputStream();
+            inputStream = socket.getInputStream();
+            outputStream = socket.getOutputStream();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        this.inputStream = input;
-        this.outputStream = output;
     }
 
 
@@ -78,7 +74,7 @@ public class GetMessage extends Thread {
         }
     }
 
-    public void write(byte[] b) {
+    public static void write(byte[] b) {
         try {
             Log.log("GetMessage write start, b:" + new String(b));
             System.out.println("发送字符"+b);
