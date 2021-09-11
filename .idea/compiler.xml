@@ -5,5 +5,6 @@
     <bytecodeTargetLevel>
       <module name="My_Application.app" target="1.8" />
     </bytecodeTargetLevel>
+    <bytecodeTargetLevel target="1.8" />
   </component>
 </project>
