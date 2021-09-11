@@ -23,6 +23,7 @@ public class BluetoothManager {
     public void onClick(int id){
         //震动
         Vibrate.vibrator(context);
+        byte[] b = new byte[8];
         switch (id){
             case 1:
                 //flag为1时 表示打开蓝牙成功
@@ -42,7 +43,8 @@ public class BluetoothManager {
                 //flag为2时 表示点击停止按钮
                 if(socket != null ){
                     GetMessage getMessage = new GetMessage(activity ,context);
-                    getMessage.write('S');
+                    b[0] = 'S';
+                    getMessage.write(b);
                 } else {
                     Toast.makeText(context, "蓝牙未连接", Toast.LENGTH_SHORT).show();
                 }
@@ -52,7 +54,7 @@ public class BluetoothManager {
                 //flag为3时，表示点击前进按钮
                 if(socket != null ){
                     GetMessage getMessage = new GetMessage(activity ,context);
-                    getMessage.write( 'F');
+                    b[0] = 'F';
                 } else {
                     Toast.makeText(context, "蓝牙未连接", Toast.LENGTH_SHORT).show();
                 }
@@ -62,7 +64,7 @@ public class BluetoothManager {
                 //flag为4时，表示点击后退按钮
                 if(socket != null ){
                     GetMessage getMessage = new GetMessage(activity ,context);
-                    getMessage.write('B');
+                    b[0] = 'B';
                 } else {
                     Toast.makeText(context, "蓝牙未连接", Toast.LENGTH_SHORT).show();
                 }
@@ -72,7 +74,7 @@ public class BluetoothManager {
                 //flag为5时，表示点击向左按钮
                 if(socket != null ){
                     GetMessage getMessage = new GetMessage(activity ,context);
-                    getMessage.write('L');
+                    b[0] = 'L';
                 } else {
                     Toast.makeText(context, "蓝牙未连接", Toast.LENGTH_SHORT).show();
                 }
@@ -82,7 +84,7 @@ public class BluetoothManager {
                 //flag为6时，表示点击向右按钮
                 if(socket != null ){
                     GetMessage getMessage = new GetMessage(activity ,context);
-                    getMessage.write('R');
+                    b[0] = 'R';
                 } else {
                     Toast.makeText(context, "蓝牙未连接", Toast.LENGTH_SHORT).show();
                 }
@@ -96,8 +98,10 @@ public class BluetoothManager {
                     String sendStr = uiUpdate.getSendText();
                     char[] ch = sendStr.toCharArray();
                     for (int i=0; i<ch.length; i++){
-                        getMessage.write(ch[i]);
+                        if(i == 8) break;
+                        b[i] = (byte) ch[i];
                     }
+                    getMessage.write(b);
                 } else {
                     Toast.makeText(context, "蓝牙未连接", Toast.LENGTH_SHORT).show();
                 }

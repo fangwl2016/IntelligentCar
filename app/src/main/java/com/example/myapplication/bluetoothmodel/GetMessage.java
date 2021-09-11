@@ -77,9 +77,10 @@ public class GetMessage extends Thread {
         }
     }
 
-    public void write(char c) {
+    public void write(byte[] b) {
         try {
-            outputStream.write(c);
+            System.out.println("发送字符"+b);
+            outputStream.write(b);
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -28,7 +28,7 @@ public class ToConnectBluetooth {
         boolean findIt = false;
 
         for(BluetoothDevice device : bondedDevices){
-            if(device.getName().contains("HC-05")){
+            if(device.getName().contains("BT04-A")){
                 //find my device
                 findIt = true;
                 bluetoothDevice = device;
