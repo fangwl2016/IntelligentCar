@@ -10,6 +10,7 @@ import androidx.annotation.RequiresApi;
 
 import com.example.myapplication.manager.UiUpdate;
 import com.example.myapplication.supportutils.ChangeFormat;
+import com.example.myapplication.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -79,12 +80,12 @@ public class GetMessage extends Thread {
 
     public void write(byte[] b) {
         try {
+            Log.log("GetMessage write start, b:" + new String(b));
             System.out.println("发送字符"+b);
             outputStream.write(b);
+            outputStream.flush();
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.log("GetMessage write throw exception:" + e.getMessage());
         }
     }
-
-
 }

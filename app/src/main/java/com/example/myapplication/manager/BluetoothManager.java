@@ -8,6 +8,8 @@ import com.example.myapplication.bluetoothmodel.GetMessage;
 import com.example.myapplication.bluetoothmodel.ToConnectBluetooth;
 import com.example.myapplication.supportutils.OpenBluetooth;
 import com.example.myapplication.supportutils.Vibrate;
+import com.example.myapplication.util.Log;
+
 import static com.example.myapplication.MainActivity.socket;
 
 public class BluetoothManager {
@@ -21,6 +23,7 @@ public class BluetoothManager {
     }
 
     public void onClick(int id){
+        Log.log("BluetoothManager onClick id:" + id);
         //震动
         Vibrate.vibrator(context);
         byte[] b = new byte[8];
