@@ -25,9 +25,8 @@ public class CollectControl {
      * 注册控件
      */
     public void initControl(Activity activity){
-        //connect button
+
         connectBtn = activity.findViewById(R.id.conntect_btn);
-        //connect status text
         connectStatusText = activity.findViewById(R.id.bluetoothStatus_text);
         receiveLabel = activity.findViewById(R.id.receive_label);
         textReceive = activity.findViewById(R.id.text_receive);

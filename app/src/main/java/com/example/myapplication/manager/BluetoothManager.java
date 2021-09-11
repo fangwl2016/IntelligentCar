@@ -93,7 +93,7 @@ public class BluetoothManager {
                 break;
 
             case 7:
-                //flag为5时，表示点击提交按钮，提交指令
+                //flag为7时，表示点击提交按钮，提交指令
                 if(socket != null ){
                     UiUpdate uiUpdate = new UiUpdate(activity);
                     String sendStr = uiUpdate.getSendText();

@@ -96,11 +96,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //实例化manager
         bluetoothManager = new BluetoothManager(this, this);
 
-        //连接蓝牙
+        //监听事件
         connectBtn = findViewById(R.id.conntect_btn);
         connectBtn.setOnClickListener(this);
-
-        //监听指令
         stopBtn = findViewById(R.id.stop_button);
         stopBtn.setOnClickListener(this);
         frontBtn = findViewById(R.id.front_button);
@@ -139,7 +137,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
-        //发送确定
+        //发送按钮
         sendBtn = findViewById(R.id.send_butten);
         sendBtn.setOnClickListener(this);
     }
@@ -169,26 +167,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 bluetoothManager.onClick(1);
                 break;
 
+            //点击停止按钮
             case R.id.stop_button:
                 bluetoothManager.onClick(2);
                 break;
 
+            //点击前进按钮
             case R.id.front_button:
                 bluetoothManager.onClick(3);
                 break;
 
+            //点击后退按钮
             case R.id.back_button:
                 bluetoothManager.onClick(4);
                 break;
 
+            //点击左转按钮
             case R.id.left_button:
                 bluetoothManager.onClick(5);
                 break;
 
+            //点击右转按钮
             case R.id.right_button:
                 bluetoothManager.onClick(6);
                 break;
 
+            //点击发送消息按钮
             case R.id.send_butten:
                 bluetoothManager.onClick(7);
                 break;

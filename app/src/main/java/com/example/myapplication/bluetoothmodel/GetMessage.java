@@ -26,23 +26,12 @@ public class GetMessage extends Thread {
     private Activity activity;
     private Context context;
 
-    private static boolean hasSaved = false;
-    private double[] weightArray = {0, 0, 0};
-    private int index = 0;
-
     /**
-     * 数据保存之后ui不再变化， 数据为0时清除该标志
+     * 获取消息流
      */
-    private boolean uiNoChange = false;
-    /**
-     * 第几次接收到数据
-     */
-    private int i = 0;
-
     public GetMessage(Activity activity, Context context) {
         this.activity = activity;
         this.context = context;
-
         try {
             inputStream = socket.getInputStream();
             outputStream = socket.getOutputStream();
@@ -57,13 +46,13 @@ public class GetMessage extends Thread {
     public void run() {
         byte[] buffer = new byte[1024];
         int bytes;
-
         while (true) {
             try {
                 //从输入流读取一定数量的字节存在buff数组中，返回读取的字节数
                 bytes = inputStream.read(buffer);
                 String str = new String(buffer, StandardCharsets.ISO_8859_1);
                 str = str.substring(0, bytes);
+                //将输入流展示到接收的数据文本框中
                 UiUpdate uiUpdate = new UiUpdate(activity);
                 uiUpdate.showReceiveText(str);
 
@@ -74,6 +63,10 @@ public class GetMessage extends Thread {
         }
     }
 
+    /**
+     * 发送字节数组
+     * @param b
+     */
     public static void write(byte[] b) {
         try {
             Log.log("GetMessage write start, b:" + new String(b));
