@@ -39,34 +39,39 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static String actionURL = "http://10.220.57.142:8080/drive/action?x=3&y=0&dir=N";
     private static ScheduledExecutorService scheduledService = Executors.newSingleThreadScheduledExecutor();
 
-//    public static void action() {
-//        final OkHttpClient client = new OkHttpClient();
-//        Request request = new Request.Builder().url(positionURL).build();
-//        Call call = client.newCall(request);
-//        try {
-//            Response response = call.execute();
-//            response.body().byteStream().close();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//
-//        scheduledService.scheduleAtFixedRate(new Runnable() {
-//            @Override
-//            public void run() {
-//                try {
-//                    Request req = new Request.Builder().url(actionURL).build();
-//                    Call call1 = client.newCall(req);
-//                    Response res = call1.execute();
-//                    byte[] buf = new byte[1024];
-//                    res.body().byteStream().read(buf);
-//                    System.out.println(new String(buf));
-//                    res.body().byteStream().close();
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }, 0, 1, TimeUnit.SECONDS);
-//    }
+    public static void action() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final OkHttpClient client = new OkHttpClient();
+                Request request = new Request.Builder().url(positionURL).build();
+                Call call = client.newCall(request);
+                try {
+                    Response response = call.execute();
+                    response.body().byteStream().close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                scheduledService.scheduleAtFixedRate(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            Request req = new Request.Builder().url(actionURL).build();
+                            Call call1 = client.newCall(req);
+                            Response res = call1.execute();
+                            byte[] buf = new byte[1024];
+                            int n = res.body().byteStream().read(buf);
+                            System.out.println(new String(buf, 0, n));
+                            res.body().byteStream().close();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, 0, 1, TimeUnit.SECONDS);
+            }
+        }).start();
+    }
 
     Button connectBtn;
     Button stopBtn;
@@ -86,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//        action();
+        action();
 
         //实例化manager
         bluetoothManager = new BluetoothManager(this, this);
