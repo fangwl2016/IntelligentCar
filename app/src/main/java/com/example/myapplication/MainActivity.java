@@ -27,6 +27,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static BluetoothAdapter bluetoothAdapter = null;
     public static BluetoothDevice bluetoothDevice = null;
     public static BluetoothSocket socket = null;
+    private static String positionURL = "http://10.220.57.142:8080/drive/position";
+    private static String actionURL = "http://10.220.57.142:8080/drive/action?x=3&y=0&dir=N";
+    private static ScheduledExecutorService scheduledService = Executors.newSingleThreadScheduledExecutor();
+
+    public static void action() {
+        HttpClient client = HttpClientBuilder.create().build();
+        try {
+            HttpResponse response = client.execute(new HttpGet(positionURL));
+            response.getEntity().getContent().close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        scheduledService.scheduleAtFixedRate(()-> {
+            try {
+                HttpResponse response = client.execute(new HttpGet(actionURL));
+                byte[] buf = new byte[1024];
+                response.getEntity().getContent().read(buf);
+                System.out.println(new String(buf));
+                response.getEntity().getContent().close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }, 0, 100, TimeUnit.MILLISECONDS);
+    }
 
     Button connectBtn;
     Button stopBtn;
@@ -95,6 +119,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //发送确定
         sendBtn = findViewById(R.id.send_butten);
         sendBtn.setOnClickListener(this);
+        action();
     }
 
     @Override
