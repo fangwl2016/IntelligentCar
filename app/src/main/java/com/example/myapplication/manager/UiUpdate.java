@@ -36,6 +36,7 @@ public class UiUpdate {
 
     public String getSendText(){
         CollectControl collectControl = new CollectControl();
+        collectControl.initControl(activity);
         EditText textSend = collectControl.getTextSend();
         return textSend.getText().toString();
     }
