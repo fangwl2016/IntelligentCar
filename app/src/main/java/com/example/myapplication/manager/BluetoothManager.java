@@ -26,7 +26,7 @@ public class BluetoothManager {
         Log.log("BluetoothManager onClick id:" + id);
         //震动
         Vibrate.vibrator(context);
-        byte[] b = new byte[8];
+        byte[] b = new byte[]{'0', '0', '0', '0', '0', '0', '0', '0'};
         switch (id){
             case 1:
                 //flag为1时 表示打开蓝牙成功
