@@ -28,20 +28,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static ScheduledExecutorService scheduledService = Executors.newSingleThreadScheduledExecutor();
 
     public static void action() {
-        HttpClient client = HttpClientBuilder.create().build();
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder().url(positionURL).build();
+        Call call = client.newCall(request);
         try {
-            HttpResponse response = client.execute(new HttpGet(positionURL));
-            response.getEntity().getContent().close();
+            Response response = call.execute();
+            response.body().byteStream().close();
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         scheduledService.scheduleAtFixedRate(()-> {
             try {
-                HttpResponse response = client.execute(new HttpGet(actionURL));
+                Request req = new Request.Builder().url(actionURL).build();
+                Call call1 = client.newCall(req);
+                Response res = call1.execute();
                 byte[] buf = new byte[1024];
-                response.getEntity().getContent().read(buf);
+                res.body().byteStream().read(buf);
                 System.out.println(new String(buf));
-                response.getEntity().getContent().close();
+                res.body().byteStream().close();
             } catch (Exception e) {
                 e.printStackTrace();
             }
