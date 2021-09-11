@@ -35,9 +35,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static String positionURL = "http://10.220.57.142:8080/drive/position";
     private static String actionURL = "http://10.220.57.142:8080/drive/action?x=3&y=0&dir=N";
     private static ScheduledExecutorService scheduledService = Executors.newSingleThreadScheduledExecutor();
-    static {
-        action();
-    }
 
     public static void action() {
         final OkHttpClient client = new OkHttpClient();
@@ -65,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     e.printStackTrace();
                 }
             }
-        }, 0, 100, TimeUnit.MILLISECONDS);
+        }, 0, 1, TimeUnit.SECONDS);
     }
 
     Button connectBtn;
@@ -77,7 +74,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        action();
+
         //实例化manager
         bluetoothManager = new BluetoothManager(this, this);
 
