@@ -2,15 +2,11 @@ package com.example.myapplication.manager;
 
 import android.app.Activity;
 import android.content.Context;
-import android.widget.EditText;
 import android.widget.Toast;
-
-import com.example.myapplication.bluetoothmodel.GetMessage;
 import com.example.myapplication.bluetoothmodel.ToConnectBluetooth;
 import com.example.myapplication.supportutils.OpenBluetooth;
 import com.example.myapplication.supportutils.Vibrate;
 
-import static com.example.myapplication.MainActivity.socket;
 public class BluetoothManager {
 
     private Activity activity;
@@ -37,6 +33,18 @@ public class BluetoothManager {
                     //open bluetooth fail
                     Toast.makeText(context, "蓝牙打开失败", Toast.LENGTH_SHORT).show();
                 }
+                break;
+
+            case 2:
+                break;
+
+            case 3:
+                break;
+
+            case 4:
+                break;
+
+            case 5:
                 break;
 
             default:

@@ -25,31 +25,31 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="蓝牙未连接"
-        android:textSize="30sp"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.731"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.144" />
+        app:layout_constraintVertical_bias="0.044" />
 
     <TextView
         android:id="@+id/receive_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text = "收到的数据："
-        android:textSize="18sp"
+        android:textSize="15sp"
         android:textColor = "#ff8c00"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.154"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.248" />
+        app:layout_constraintVertical_bias="0.168" />
 
     <EditText
         android:id="@+id/text_receive"
-        android:layout_width="360dp"
+        android:layout_width="340dp"
         android:layout_height="70dp"
         android:hint="收到的的数据文本"
         android:textSize="15sp"
@@ -58,16 +58,16 @@
         android:gravity="center"
         android:windowSoftInputMode="adjustUnspecified|stateHidden"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.254"
+        app:layout_constraintHorizontal_bias="0.334"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.318" />
+        app:layout_constraintVertical_bias="0.258" />
 
     <Button
         android:id="@+id/stop_button"
         android:layout_width="70dp"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
         android:background="@drawable/height"
         android:text="停止"
         android:textSize="20sp"
@@ -81,7 +81,7 @@
     <Button
         android:id="@+id/back_button"
         android:layout_width="70dp"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
         android:background="@drawable/height"
         android:text="后退"
         android:textSize="20sp"
@@ -95,7 +95,7 @@
     <Button
         android:id="@+id/front_button"
         android:layout_width="70dp"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
         android:background="@drawable/height"
         android:text="前进"
         android:textSize="20sp"
@@ -109,7 +109,7 @@
     <Button
         android:id="@+id/left_button"
         android:layout_width="70dp"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
         android:background="@drawable/height"
         android:text="左转"
         android:textSize="20sp"
@@ -123,7 +123,7 @@
     <Button
         android:id="@+id/right_button"
         android:layout_width="70dp"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
         android:background="@drawable/height"
         android:text="右转"
         android:textSize="20sp"
@@ -136,17 +136,17 @@
 
     <Button
         android:id="@+id/send_butten"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="60dp"
+        android:layout_height="30dp"
         android:background="@drawable/height"
         android:text="send"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.946"
+        app:layout_constraintHorizontal_bias="0.966"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.876" />
+        app:layout_constraintVertical_bias="0.856" />
 
     <EditText
         android:id="@+id/text_send"

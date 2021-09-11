@@ -107,13 +107,5 @@ public class GetMessage extends Thread {
         }
     }
 
-    public boolean getHasSaved(){
-        return hasSaved;
-    }
-
-    public void setHasSaved(boolean status, boolean ui){
-        hasSaved = status;
-        uiNoChange = ui;
-    }
 
 }
