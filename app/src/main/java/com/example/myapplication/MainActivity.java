@@ -2,6 +2,7 @@ package com.example.myapplication;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
@@ -38,9 +39,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static String positionURL = "http://10.220.57.142:8080/drive/position";
     private static String actionURL = "http://10.220.57.142:8080/drive/action?x=3&y=0&dir=N";
     private static ScheduledExecutorService scheduledService = Executors.newSingleThreadScheduledExecutor();
+    static {
+        action();
+    }
 
     public static void action() {
-        OkHttpClient client = new OkHttpClient();
+        final OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder().url(positionURL).build();
         Call call = client.newCall(request);
         try {
@@ -50,17 +54,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             e.printStackTrace();
         }
 
-        scheduledService.scheduleAtFixedRate(()-> {
-            try {
-                Request req = new Request.Builder().url(actionURL).build();
-                Call call1 = client.newCall(req);
-                Response res = call1.execute();
-                byte[] buf = new byte[1024];
-                res.body().byteStream().read(buf);
-                System.out.println(new String(buf));
-                res.body().byteStream().close();
-            } catch (Exception e) {
-                e.printStackTrace();
+        scheduledService.scheduleAtFixedRate(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Request req = new Request.Builder().url(actionURL).build();
+                    Call call1 = client.newCall(req);
+                    Response res = call1.execute();
+                    byte[] buf = new byte[1024];
+                    res.body().byteStream().read(buf);
+                    System.out.println(new String(buf));
+                    res.body().byteStream().close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }, 0, 100, TimeUnit.MILLISECONDS);
     }
@@ -148,7 +155,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //退出时关闭蓝牙
         BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if(bluetoothAdapter.isEnabled()){
-            bluetoothAdapter.disable();
+//            bluetoothAdapter.disable();
         }
     }
 
