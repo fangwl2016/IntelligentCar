@@ -102,6 +102,7 @@ public class BluetoothManager {
                         if(i == 8) break;
                         b[i] = (byte) ch[i];
                     }
+                    Log.log("BluetoothManager onClick case 7, sendStr:" + sendStr + " str byte length:" + ch.length + " b[] length:" + b.length);
                     GetMessage.write(b);
                 } else {
                     Toast.makeText(context, "蓝牙未连接", Toast.LENGTH_SHORT).show();
