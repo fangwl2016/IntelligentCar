@@ -77,7 +77,6 @@ public class GetMessage extends Thread {
     public static void write(byte[] b) {
         try {
             Log.log("GetMessage write start, b:" + new String(b));
-            System.out.println("发送字符"+b);
             outputStream.write(b);
             outputStream.flush();
         } catch (IOException e) {

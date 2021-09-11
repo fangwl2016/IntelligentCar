@@ -97,6 +97,7 @@ public class BluetoothManager {
                 if(socket != null ){
                     UiUpdate uiUpdate = new UiUpdate(activity);
                     String sendStr = uiUpdate.getSendText();
+                    Log.log("BluetoothManager onClick case 7, sendStr:" + sendStr );;
                     char[] ch = sendStr.toCharArray();
                     for (int i=0; i<ch.length; i++){
                         if(i == 8) break;

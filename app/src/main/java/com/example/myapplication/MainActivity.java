@@ -154,11 +154,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Log.e("MainActivity", e.toString());
             }
         }
-        //退出时关闭蓝牙
-        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        if(bluetoothAdapter.isEnabled()){
-            bluetoothAdapter.disable();
-        }
+//        //退出时关闭蓝牙
+//        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+//        if(bluetoothAdapter.isEnabled()){
+//            bluetoothAdapter.disable();
+//        }
     }
 
     @Override
