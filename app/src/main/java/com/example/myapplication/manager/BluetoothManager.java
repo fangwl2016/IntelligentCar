@@ -3,9 +3,12 @@ package com.example.myapplication.manager;
 import android.app.Activity;
 import android.content.Context;
 import android.widget.Toast;
+
+import com.example.myapplication.bluetoothmodel.GetMessage;
 import com.example.myapplication.bluetoothmodel.ToConnectBluetooth;
 import com.example.myapplication.supportutils.OpenBluetooth;
 import com.example.myapplication.supportutils.Vibrate;
+import static com.example.myapplication.MainActivity.socket;
 
 public class BluetoothManager {
 
@@ -36,15 +39,68 @@ public class BluetoothManager {
                 break;
 
             case 2:
+                //flag为2时 表示点击停止按钮
+                if(socket != null ){
+                    GetMessage getMessage = new GetMessage(activity ,context);
+                    getMessage.write('S');
+                } else {
+                    Toast.makeText(context, "蓝牙未连接", Toast.LENGTH_SHORT).show();
+                }
                 break;
 
             case 3:
+                //flag为3时，表示点击前进按钮
+                if(socket != null ){
+                    GetMessage getMessage = new GetMessage(activity ,context);
+                    getMessage.write( 'F');
+                } else {
+                    Toast.makeText(context, "蓝牙未连接", Toast.LENGTH_SHORT).show();
+                }
                 break;
 
             case 4:
+                //flag为4时，表示点击后退按钮
+                if(socket != null ){
+                    GetMessage getMessage = new GetMessage(activity ,context);
+                    getMessage.write('B');
+                } else {
+                    Toast.makeText(context, "蓝牙未连接", Toast.LENGTH_SHORT).show();
+                }
                 break;
 
             case 5:
+                //flag为5时，表示点击向左按钮
+                if(socket != null ){
+                    GetMessage getMessage = new GetMessage(activity ,context);
+                    getMessage.write('L');
+                } else {
+                    Toast.makeText(context, "蓝牙未连接", Toast.LENGTH_SHORT).show();
+                }
+                break;
+
+            case 6:
+                //flag为6时，表示点击向右按钮
+                if(socket != null ){
+                    GetMessage getMessage = new GetMessage(activity ,context);
+                    getMessage.write('R');
+                } else {
+                    Toast.makeText(context, "蓝牙未连接", Toast.LENGTH_SHORT).show();
+                }
+                break;
+
+            case 7:
+                //flag为5时，表示点击提交按钮，提交指令
+                if(socket != null ){
+                    GetMessage getMessage = new GetMessage(activity ,context);
+                    UiUpdate uiUpdate = new UiUpdate(activity);
+                    String sendStr = uiUpdate.getSendText();
+                    char[] ch = sendStr.toCharArray();
+                    for (int i=0; i<ch.length; i++){
+                        getMessage.write(ch[i]);
+                    }
+                } else {
+                    Toast.makeText(context, "蓝牙未连接", Toast.LENGTH_SHORT).show();
+                }
                 break;
 
             default:

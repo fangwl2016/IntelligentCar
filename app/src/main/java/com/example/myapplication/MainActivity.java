@@ -185,6 +185,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 bluetoothManager.onClick(6);
                 break;
 
+            case R.id.send_butten:
+                bluetoothManager.onClick(7);
+                break;
+
             default:
                 break;
         }

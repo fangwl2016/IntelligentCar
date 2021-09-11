@@ -8,6 +8,7 @@ import android.os.Looper;
 
 import androidx.annotation.RequiresApi;
 
+import com.example.myapplication.manager.UiUpdate;
 import com.example.myapplication.supportutils.ChangeFormat;
 
 import java.io.IOException;
@@ -66,31 +67,8 @@ public class GetMessage extends Thread {
                 bytes = inputStream.read(buffer);
                 String str = new String(buffer, StandardCharsets.ISO_8859_1);
                 str = str.substring(0, bytes);
-
-                //获取第一个字符
-                char[] ch = str.toCharArray();
-                int a = ChangeFormat.asciiToInt(ch[0]);
-
-                bytes = inputStream.read(buffer);
-                str = new String(buffer, StandardCharsets.ISO_8859_1);
-                str = str.substring(0, bytes);
-
-                //获取第二个字符
-                ch = str.toCharArray();
-                int b = ChangeFormat.asciiToInt(ch[0]);
-
-                double c;
-                if(a>b){
-                    c = a % 100 + 0.01 * b;
-                }else{
-                    c = b % 100 + 0.01 * a;
-                }
-
-                if(c == 0){
-                    hasSaved = false;
-                }
-
-                i++;
+                UiUpdate uiUpdate = new UiUpdate(activity);
+                uiUpdate.showReceiveText(str);
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -99,9 +77,9 @@ public class GetMessage extends Thread {
         }
     }
 
-    public void write(byte bytes) {
+    public void write(char c) {
         try {
-            outputStream.write(bytes);
+            outputStream.write(c);
         } catch (IOException e) {
             e.printStackTrace();
         }
