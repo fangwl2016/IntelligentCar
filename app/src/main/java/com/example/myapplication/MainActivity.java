@@ -155,7 +155,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //退出时关闭蓝牙
         BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if(bluetoothAdapter.isEnabled()){
-//            bluetoothAdapter.disable();
+            bluetoothAdapter.disable();
         }
     }
 
