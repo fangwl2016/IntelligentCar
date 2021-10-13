@@ -1,35 +1,68 @@
 package com.example.myapplication;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Handler;
 import android.util.Log;
+import android.view.SurfaceView;
 import android.view.View;
 import android.view.KeyEvent;
 import android.os.Bundle;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.myapplication.manager.BluetoothManager;
 import com.example.myapplication.supportutils.Vibrate;
+import com.giftedcat.cameratakelib.CameraTakeManager;
+import com.giftedcat.cameratakelib.listener.CameraTakeListener;
+import com.giftedcat.cameratakelib.utils.LogUtil;
 
+import org.pytorch.IValue;
+import org.pytorch.Module;
+import org.pytorch.Tensor;
+import org.pytorch.torchvision.TensorImageUtils;
+
+import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+import cn.finalteam.galleryfinal.permission.EasyPermissions;
 import okhttp3.Call;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
+import static com.example.myapplication.Utils.assetFilePath;
+
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+
+    //拍照
+    Unbinder unbinder;
+    private Context mContext;
+    /** 权限相关*/
+    private static final int GETPERMS = 100;
+    private String[] perms;
+    private Handler permissionsHandler = new Handler();
+    CameraTakeManager manager;
 
     public BluetoothManager bluetoothManager = null;
     public static BluetoothAdapter bluetoothAdapter = null;
@@ -81,11 +114,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Button rightBtn;
     EditText sendMessageText;
     Button sendBtn;
+    SurfaceView previewView;
+    ImageView imgPic;
+    TextView tvPicDir;
+    Button takePhotoBtn;
 
     /**
      * 计算两次返回时时间间隔
      */
     private long exitTime = 0;
+
+    private ImageView imageView;
+    private TextView textView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,6 +149,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         leftBtn.setOnClickListener(this);
         rightBtn = findViewById(R.id.right_button);
         rightBtn.setOnClickListener(this);
+        previewView = findViewById(R.id.surfaceview);
+        imgPic = findViewById(R.id.img_pic);
+        tvPicDir = findViewById(R.id.tv_pic_dir);
+        takePhotoBtn = findViewById(R.id.btn_take_photo);
+        takePhotoBtn.setOnClickListener(this);
 
         //发送消息编辑框
         sendMessageText = findViewById(R.id.text_send);
@@ -140,7 +185,110 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //发送按钮
         sendBtn = findViewById(R.id.send_butten);
         sendBtn.setOnClickListener(this);
+        //加载模型
+        loadModel();
+
+        unbinder = ButterKnife.bind(this);
+        mContext = this;
+        perms = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
+        checkPermission();
+        startAutoTakePhotoThread();
+
     }
+
+    public void checkPermission() {
+        //判断是否有相关权限，并申请权限
+        if (EasyPermissions.hasPermissions(mContext, perms)) {
+            permissionsHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    init();
+                }
+            });
+        } else {
+            ActivityCompat.requestPermissions(MainActivity.this, perms, GETPERMS);
+        }
+    }
+
+    public void startAutoTakePhotoThread(){
+        new Thread(){
+            public void run(){
+                LogUtil.d("启动拍照线程");
+                while(true){
+                    try {
+                        sleep(5000);
+                        manager.takePhoto();
+                    }catch (Exception e){
+                        LogUtil.e("发生错误",e);
+                    }
+                }
+            }
+        }.start();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        init();
+    }
+
+    private void init(){
+        manager = new CameraTakeManager(this, previewView, new CameraTakeListener() {
+            @Override
+            public void onSuccess(File bitmapFile, Bitmap mBitmap) {
+                imgPic.setImageBitmap(mBitmap);
+                tvPicDir.setText("图片路径：" + bitmapFile.getPath());
+            }
+
+            @Override
+            public void onFail(String error) {
+                LogUtil.e(error);
+            }
+        });
+    }
+
+    private void loadModel() {
+        imageView = findViewById(R.id.imageView);
+        textView = findViewById(R.id.textView);
+        Bitmap bitmap= null;
+        Module module = null;
+        try {
+
+            // 1. 获取图片
+            bitmap = BitmapFactory.decodeStream(getAssets().open("image.jpg"));
+            imageView.setImageBitmap(bitmap);
+            // 2. 加载模型
+            module =Module.load(assetFilePath(this, "trafficLights.pt"));
+        } catch (IOException e) {
+
+            e.printStackTrace();
+            finish();
+        }
+        // 3. bitmap -> Tensor
+        Tensor inputTensor = TensorImageUtils.bitmapToFloat32Tensor(bitmap, TensorImageUtils.TORCHVISION_NORM_MEAN_RGB, TensorImageUtils.TORCHVISION_NORM_STD_RGB);
+
+        // 4. 运行模型
+        Tensor resultTensor = module.forward(IValue.from(inputTensor)).toTensor();
+
+        // 5. 解析结果
+        final float[] scores = resultTensor.getDataAsFloatArray();
+        float maxScore = -Float.MAX_VALUE;
+        int maxScoreIdx = -1;
+        for (int i = 0; i < scores.length; i++) {
+
+            if (scores[i] > maxScore) {
+
+                maxScore = scores[i];
+                maxScoreIdx = i;
+            }
+        }
+        String className = Constants.IMAGENET_CLASSES[maxScoreIdx];
+        Log.i("className", className);
+        textView.setText("红绿灯类别为" + className);
+
+
+}
 
     @Override
     protected void onDestroy() {
@@ -195,6 +343,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             //点击发送消息按钮
             case R.id.send_butten:
                 bluetoothManager.onClick(7);
+                break;
+
+            case R.id.btn_take_photo:
+                /** 点击拍照获取照片*/
+                manager.takePhoto();
                 break;
 
             default:
